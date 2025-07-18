@@ -29,6 +29,13 @@ class GiphySearchBar @JvmOverloads constructor(
         textSize = 16f
         setTextColor(Color.BLACK)
         inputType = android.text.InputType.TYPE_CLASS_TEXT
+        // Добавляем отступ слева для текста
+        setPadding(
+            resources.getDimensionPixelSize(R.dimen.search_bar_padding_start), // 8dp
+            paddingTop,
+            paddingEnd,
+            paddingBottom
+        )
 
         // Настройка автопоиска
         addTextChangedListener { editable ->
