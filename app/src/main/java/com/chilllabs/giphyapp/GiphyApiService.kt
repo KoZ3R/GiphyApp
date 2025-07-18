@@ -14,12 +14,13 @@ interface GiphyApiService {
         @Query("rating") rating: String = "g",
         @Query("lang") lang: String = "en"
     ): GiphyResponse
+
     data class GiphyResponse(val data: List<GifData>)
     data class GifData(val id: String, val title: String, val images: Images)
     data class Images(
         @SerializedName("fixed_height") val fixedHeight: FixedHeight
     )
-    data class FixedHeight(val url: String)
-
-
+    data class FixedHeight(
+        @SerializedName("url") val url: String
+    )
 }

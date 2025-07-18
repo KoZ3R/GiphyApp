@@ -1,18 +1,18 @@
 package com.chilllabs.giphyapp
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.launch
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var gifAdapter: GifAdapter
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,66 +20,69 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupSearchBar()
+        observeViewModel()
     }
 
     private fun setupRecyclerView() {
         gifAdapter = GifAdapter().apply {
-            onItemClick = { gif: GiphyApiService.GifData ->
-                Toast.makeText(
-                    this@MainActivity,
-                    "Выбран GIF: ${gif.id}",
-                    Toast.LENGTH_SHORT
-                ).show()
+            onItemClick = { gif ->
+                println("Clicked GIF: ${gif.id}")
+                val intent = Intent(this@MainActivity, GifDetailActivity::class.java).apply {
+                    putExtra("GIF_ID", gif.id)
+                    putExtra("GIF_TITLE", gif.title)
+                    putExtra("GIF_URL", gif.images.fixedHeight.url)
+                }
+                startActivity(intent)
             }
         }
 
-        findViewById<RecyclerView>(R.id.gifRecyclerView).apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = gifAdapter
-        }
+        val recyclerView = findViewById<RecyclerView>(R.id.gifRecyclerView)
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = gifAdapter
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!viewModel.isLoading.value!! && (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5)) {
+                    println("Triggering load more GIFs")
+                    gifAdapter.addLoadingFooter()
+                    viewModel.loadMoreGifs()
+                }
+            }
+        })
     }
 
     private fun setupSearchBar() {
-        val searchBar = findViewById<EditText>(R.id.searchBar)
-        searchBar.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = searchBar.text.toString().trim()
-                if (query.isNotEmpty()) {
-                    searchGifs(query)
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Введите запрос для поиска",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                true
-            } else {
-                false
-            }
+        val searchBar = findViewById<GiphySearchBar>(R.id.searchBar)
+        searchBar.onSearchQueryChanged = { query ->
+            println("Received search query in MainActivity: $query")
+            viewModel.searchGifs(query)
         }
     }
 
-    private fun searchGifs(query: String) {
-        lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.giphyService.searchGifs(query = query)
-                if (response.data.isNotEmpty()) {
-                    gifAdapter.submitList(response.data)
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "GIF для '$query' не найдены",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Ошибка: ${e.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                e.printStackTrace()
+    private fun observeViewModel() {
+        viewModel.gifs.observe(this) { gifs ->
+            println("Updating RecyclerView with ${gifs.size} GIFs")
+            gifAdapter.submitList(gifs)
+            gifAdapter.removeLoadingFooter()
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            println("Loading state changed: $isLoading")
+            findViewById<android.widget.ProgressBar>(R.id.loadingProgressBar).visibility =
+                if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
+        }
+
+        viewModel.error.observe(this) { error ->
+            if (error != null) {
+                println("Error received: $error")
+                Snackbar.make(findViewById(R.id.gifRecyclerView), error, Snackbar.LENGTH_LONG).show()
             }
         }
     }
