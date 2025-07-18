@@ -52,4 +52,13 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    testImplementation (libs.junit)
+    testImplementation (libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation (libs.jetbrains.kotlinx.coroutines.test.v180)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.espresso.core)
+    testImplementation(kotlin("test"))
 }

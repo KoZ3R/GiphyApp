@@ -1,9 +1,12 @@
 [versions]
 androidx-core-ktx = "1.16.0"
 androidx-appcompat = "1.7.1"
+kotlinx-coroutines-test-version = "1.8.0"
 material = "1.12.0"
 androidx-activity = "1.10.1"
 androidx-constraintlayout = "2.2.1"
+mockito-core = "5.18.0"
+mockito-inline = "5.2.0"
 retrofit = "3.0.0"
 okhttp-logging = "5.1.0"
 glide = "4.16.0"
@@ -21,9 +24,13 @@ kotlin = "2.2.0"
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+jetbrains-kotlinx-coroutines-test-v180 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test-version" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito-inline" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logging" }
