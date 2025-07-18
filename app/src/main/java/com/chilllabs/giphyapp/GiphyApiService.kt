@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GiphyApiService {
-    @GET("v1/gifs/search")
+    @GET("gifs/search")
     suspend fun searchGifs(
         @Query("api_key") apiKey: String = RetrofitClient.API_KEY,
         @Query("q") query: String,
