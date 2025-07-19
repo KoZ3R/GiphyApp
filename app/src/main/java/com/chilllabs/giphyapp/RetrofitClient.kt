@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     private const val BASE_URL = "https://api.giphy.com/v1/"
-    internal const val API_KEY = "iBYRKgezch8d6Vfkc2TXuyisnBrKGqkZ"
+    internal const val API_KEY = "c1oY3nmgtplq0oOz1KBVuW00DWREW3oV"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
