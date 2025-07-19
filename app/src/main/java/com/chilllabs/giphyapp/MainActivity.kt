@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupSearchBar()
+        setupScrollToTopButton()
         observeViewModel()
     }
 
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, GifDetailActivity::class.java).apply {
                     putExtra("GIF_ID", gif.id)
                     putExtra("GIF_TITLE", gif.title)
-                    putExtra("GIF_URL", gif.images.fixedHeight.url)
+                    putExtra("GIF_URL", gif.images.fixed_height.url)
                 }
                 startActivity(intent)
             }
@@ -49,8 +51,17 @@ class MainActivity : AppCompatActivity() {
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                if (!viewModel.isLoading.value!! && (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5)) {
-                    println("Triggering load more GIFs")
+                // Управление видимостью кнопки "Вверх"
+                val scrollToTopButton = findViewById<FloatingActionButton>(R.id.scroll_to_top_button)
+                scrollToTopButton.visibility = if (firstVisibleItemPosition > 10) {
+                    android.view.View.VISIBLE
+                } else {
+                    android.view.View.GONE
+                }
+
+                // Пагинация
+                if (!viewModel.isLoading.value!! && totalItemCount > 0 && (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5)) {
+                    println("Triggering load more GIFs, visible: $visibleItemCount, total: $totalItemCount, first: $firstVisibleItemPosition")
                     gifAdapter.addLoadingFooter()
                     viewModel.loadMoreGifs()
                 }
@@ -66,10 +77,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupScrollToTopButton() {
+        val scrollToTopButton = findViewById<FloatingActionButton>(R.id.scroll_to_top_button)
+        scrollToTopButton.setOnClickListener {
+            println("Scroll to top clicked")
+            findViewById<RecyclerView>(R.id.gifRecyclerView).smoothScrollToPosition(0)
+            scrollToTopButton.visibility = android.view.View.GONE
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.gifs.observe(this) { gifs ->
             println("Updating RecyclerView with ${gifs.size} GIFs")
-            gifAdapter.submitList(gifs)
+            gifAdapter.submitList(gifs.toList()) // Копируем список для стабильности
             gifAdapter.removeLoadingFooter()
         }
 

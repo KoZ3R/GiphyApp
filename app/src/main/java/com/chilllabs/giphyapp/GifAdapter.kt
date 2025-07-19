@@ -44,7 +44,7 @@ class GifAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback()) {
         private val imageView: ImageView = itemView.findViewById(R.id.gifImageView)
 
         fun bind(gif: GiphyApiService.GifData) {
-            val url = gif.images.fixedHeight.url
+            val url = gif.images.fixed_height.url
             println("Loading GIF URL: $url")
             if (url.isNotEmpty()) {
                 Glide.with(itemView)
