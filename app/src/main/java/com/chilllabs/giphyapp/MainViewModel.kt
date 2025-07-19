@@ -46,11 +46,17 @@ class MainViewModel : ViewModel() {
                     query = encodedQuery,
                     offset = currentOffset
                 )
-                println("Received response: $response")
-                val currentList = _gifs.value.orEmpty().toMutableList()
-                currentList.addAll(response.data)
-                _gifs.value = currentList
-                currentOffset += limit
+                println("Received response with ${response.data.size} GIFs, total: ${response.pagination.total_count}")
+                if (response.data.isNotEmpty()) {
+                    val currentList = _gifs.value.orEmpty().toMutableList()
+                    currentList.addAll(response.data)
+                    _gifs.value = currentList
+                    currentOffset += response.data.size
+                    println("Updated offset to: $currentOffset")
+                } else {
+                    println("No more GIFs available for query: $query")
+                    _error.value = "No more GIFs available for this query"
+                }
                 _isLoading.value = false
             } catch (e: HttpException) {
                 _isLoading.value = false
