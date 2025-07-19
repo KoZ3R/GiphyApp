@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.URLEncoder
@@ -20,11 +21,12 @@ class MainViewModel : ViewModel() {
 
     private var currentQuery = ""
     private var currentOffset = 0
-    private val limit = 20
+    private val limit = 50
 
     fun searchGifs(query: String, isNewSearch: Boolean = true) {
         if (query.isEmpty()) {
             println("Search query is empty, skipping")
+            _error.postValue("Please enter a search query")
             return
         }
 
@@ -44,33 +46,42 @@ class MainViewModel : ViewModel() {
                 println("Full request URL: https://api.giphy.com/v1/gifs/search?q=$encodedQuery&api_key=${RetrofitClient.API_KEY}&limit=$limit&offset=$currentOffset&rating=g&lang=en")
                 val response = RetrofitClient.giphyService.searchGifs(
                     query = encodedQuery,
-                    offset = currentOffset
+                    offset = currentOffset,
+                    limit = limit
                 )
-                println("Received response with ${response.data.size} GIFs, total: ${response.pagination.total_count}")
-                if (response.data.isNotEmpty()) {
-                    val currentList = _gifs.value.orEmpty().toMutableList()
-                    currentList.addAll(response.data)
-                    _gifs.value = currentList
-                    currentOffset += response.data.size
-                    println("Updated offset to: $currentOffset")
-                } else {
-                    println("No more GIFs available for query: $query")
-                    _error.value = "No more GIFs available for this query"
+                println("Received response with ${response.data.size} GIFs, total_count: ${response.pagination.total_count}, offset: ${response.pagination.offset}")
+                val currentList = _gifs.value.orEmpty().toMutableList()
+                currentList.addAll(response.data)
+                _gifs.postValue(currentList)
+                currentOffset += limit
+                println("Updated offset to: $currentOffset, total GIFs in list: ${currentList.size}")
+                _isLoading.postValue(false)
+                if (response.data.isEmpty() && currentOffset < response.pagination.total_count) {
+                    println("No GIFs at offset $currentOffset, but total_count (${response.pagination.total_count}) not reached, retrying")
+                    loadMoreGifs()
+                } else if (response.data.isEmpty() && currentList.isEmpty()) {
+                    println("No GIFs found for query: $query")
+                    _error.postValue("No GIFs found for this query")
                 }
-                _isLoading.value = false
             } catch (e: HttpException) {
-                _isLoading.value = false
+                _isLoading.postValue(false)
                 val errorBody = e.response()?.errorBody()?.string()
                 println("HTTP Error: ${e.code()} - $errorBody")
-                _error.value = when (e.code()) {
-                    401 -> "Недействительный API-ключ. Проверьте ключ в Giphy Dashboard."
-                    404 -> "Ресурс не найден: $errorBody"
-                    else -> "HTTP Ошибка: ${e.code()} - ${e.message()}"
+                if (e.code() == 429) {
+                    println("Rate limit exceeded, retrying after 5 seconds")
+                    delay(5000)
+                    searchGifs(query, isNewSearch)
+                } else {
+                    _error.postValue(when (e.code()) {
+                        401 -> "Invalid API key. Check your key in Giphy Dashboard."
+                        404 -> "Resource not found: $errorBody"
+                        else -> "HTTP Error: ${e.code()} - ${e.message()}"
+                    })
                 }
             } catch (e: Exception) {
-                _isLoading.value = false
+                _isLoading.postValue(false)
                 println("API Error: ${e.message}")
-                _error.value = "Ошибка: ${e.localizedMessage}"
+                _error.postValue("Error: ${e.localizedMessage}")
             }
         }
     }

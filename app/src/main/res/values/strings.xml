@@ -1,3 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GiphyApp</string>
+    <string name="giphy_title">GIPHY</string>
+    <string name="gif_description">GIF: %1$s</string>
+    <string name="scroll_to_top_description">Scroll to top</string>
+    <string name="search_bar_description">Search GIFs</string>
 </resources>

@@ -3,6 +3,7 @@ package com.chilllabs.giphyapp
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
 import kotlinx.coroutines.Job
@@ -24,11 +25,14 @@ class GiphySearchBar @JvmOverloads constructor(
     }
 
     private fun setupView() {
-        background = context.getDrawable(R.drawable.search_bar_bg)
+        background = AppCompatResources.getDrawable(context, R.drawable.search_bar_bg)
         hint = "Search GIFs..."
         textSize = 16f
         setTextColor(Color.BLACK)
         inputType = android.text.InputType.TYPE_CLASS_TEXT
+        minHeight = 48.dpToPx(context) // Минимальная высота для области касания
+        maxWidth = 360.dpToPx(context) // Ограничение максимальной ширины
+        contentDescription = context.getString(R.string.search_bar_description) // Для доступности
         // Добавляем отступ слева для текста
         setPadding(
             resources.getDimensionPixelSize(R.dimen.search_bar_padding_start), // 8dp
@@ -51,5 +55,9 @@ class GiphySearchBar @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 }
