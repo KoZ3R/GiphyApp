@@ -1,10 +1,10 @@
 package com.chilllabs.giphyapp
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -28,12 +28,12 @@ class GiphySearchBar @JvmOverloads constructor(
         background = AppCompatResources.getDrawable(context, R.drawable.search_bar_bg)
         hint = "Search GIFs..."
         textSize = 16f
-        setTextColor(ContextCompat.getColor(context, R.color.search_text))
-        setHintTextColor(ContextCompat.getColor(context, R.color.white))
+        setTextColor(Color.BLACK)
         inputType = android.text.InputType.TYPE_CLASS_TEXT
-        minHeight = 48.dpToPx(context)
-        maxWidth = 360.dpToPx(context)
-        contentDescription = context.getString(R.string.search_bar_description)
+        minHeight = 48.dpToPx(context) // Минимальная высота для области касания
+        maxWidth = 360.dpToPx(context) // Ограничение максимальной ширины
+        contentDescription = context.getString(R.string.search_bar_description) // Для доступности
+        // Добавляем отступ слева для текста
         setPadding(
             resources.getDimensionPixelSize(R.dimen.search_bar_padding_start), // 8dp
             paddingTop,
@@ -41,11 +41,12 @@ class GiphySearchBar @JvmOverloads constructor(
             paddingBottom
         )
 
+        // Настройка автопоиска
         addTextChangedListener { editable ->
             val query = editable?.toString()?.trim() ?: ""
-            searchJob?.cancel()
+            searchJob?.cancel() // Отменяем предыдущий поиск
             searchJob = MainScope().launch {
-                delay(500L)
+                delay(500L) // Задержка 500 мс
                 if (query.isNotEmpty()) {
                     println("Search query emitted: $query")
                     onSearchQueryChanged?.invoke(query)

@@ -1,54 +1,56 @@
 [versions]
-androidGradlePlugin = "8.11.1"
-kotlin = "2.2.0"
-androidxCoreKtx = "1.16.0"
-androidxAppcompat = "1.7.1"
+androidx-core-ktx = "1.16.0"
+androidx-appcompat = "1.7.1"
+core-testing = "2.2.0"
+kotlinx-coroutines-test = "1.7.3"
+kotlinx-coroutines-test-version = "1.8.0"
 material = "1.12.0"
-androidxActivity = "1.10.1"
-androidxConstraintlayout = "2.2.1"
+androidx-activity = "1.10.1"
+androidx-constraintlayout = "2.2.1"
+mockito-core = "5.18.0"
+mockito-inline = "5.2.0"
+mockk-version = "1.13.5"
 retrofit = "3.0.0"
-converterGson = "3.0.0"
-loggingInterceptor = "5.1.0"
+okhttp-logging = "5.1.0"
 glide = "4.16.0"
-kotlinxCoroutines = "1.10.2"
-androidxPaging = "3.3.6"
-androidxLifecycle = "2.9.2"
-androidxRecyclerview = "1.4.0"
-androidxFragmentKtx = "1.8.8"
+kotlinx-coroutines = "1.10.2"
+androidx-paging = "3.3.6"
 junit = "4.13.2"
+androidx-junit = "1.2.1"
+espresso = "3.6.1"
 mockk = "1.14.4"
-mockito = "5.18.0"
-kotlinxCoroutinesTest = "1.10.2"
-androidxJunit = "1.2.1"
-espressoCore = "3.6.1"
-androidxCoreTesting = "2.2.0"
+androidx-lifecycle = "2.9.2"
+androidx-recyclerview = "1.4.0"
+android-gradle-plugin = "8.11.1"
+kotlin = "2.2.0"
 
 [libraries]
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "core-testing" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+jetbrains-kotlinx-coroutines-test-v180 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test-version" }
+kotlinx-coroutines-test-v173 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-androidx-activity = { module = "androidx.activity:activity", version.ref = "androidxActivity" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintlayout" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito-inline" }
+mockk-v1135 = { module = "io.mockk:mockk", version.ref = "mockk-version" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logging" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
-androidx-paging = { module = "androidx.paging:paging-runtime", version.ref = "androidxPaging" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
-androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
-androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidxRecyclerview" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragmentKtx" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+androidx-paging = { module = "androidx.paging:paging-runtime", version.ref = "androidx-paging" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 junit = { module = "junit:junit", version.ref = "junit" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
-androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidxCoreTesting" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -48,13 +47,7 @@ class GifAdapter : ListAdapter<GiphyApiService.GifData, RecyclerView.ViewHolder>
                 .error(R.drawable.error_placeholder)
                 .into(gifHolder.imageView)
             gifHolder.itemView.setOnClickListener {
-                val activity = holder.itemView.context as? FragmentActivity
-                activity?.supportFragmentManager?.let { fragmentManager ->
-                    GifDialogFragment.newInstance(
-                        gif.images.fixed_height.url,
-                        gif.title.takeIf { it.isNotEmpty() } ?: "Unnamed GIF"
-                    ).show(fragmentManager, "GifDialogFragment")
-                }
+                onItemClick?.invoke(gif)
             }
         } else {
             println("Binding loading footer at position $position")

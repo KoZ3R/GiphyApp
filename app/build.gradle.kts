@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.chilllabs.giphyapp"
-    compileSdk = 34
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.chilllabs.giphyapp"
         minSdk = 24
@@ -29,7 +29,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = false
+        viewBinding = true
     }
 }
 
@@ -43,20 +43,26 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.glide)
-    annotationProcessor(libs.glide.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.paging)
     implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.inline)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    testImplementation (libs.junit)
+    testImplementation (libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation (libs.jetbrains.kotlinx.coroutines.test.v180)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.espresso.core)
     testImplementation(kotlin("test"))
     testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test.v173)
+    testImplementation(libs.mockk.v1135)
+
 }
