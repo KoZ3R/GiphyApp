@@ -17,14 +17,6 @@ class GifDialogFragment : DialogFragment() {
         private const val ARG_GIF_URL = "gif_url"
         private const val ARG_GIF_TITLE = "gif_title"
 
-        fun newInstance(gifUrl: String, gifTitle: String): GifDialogFragment {
-            return GifDialogFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_GIF_URL, gifUrl)
-                    putString(ARG_GIF_TITLE, gifTitle)
-                }
-            }
-        }
     }
 
     override fun onCreateView(
@@ -67,7 +59,7 @@ class GifDialogFragment : DialogFragment() {
             start()
         }
 
-        // Закрытие при клике на фон
+
         view.setOnClickListener { dismiss() }
     }
 

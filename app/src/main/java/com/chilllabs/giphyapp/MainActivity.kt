@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
         recyclerView.layoutManager = GridLayoutManager(this, spanCount)
         recyclerView.adapter = gifAdapter
-        recyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount, this))
+
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                // Управление видимостью кнопки "Вверх"
+
                 val scrollToTopButton = findViewById<FloatingActionButton>(R.id.scroll_to_top_button)
                 scrollToTopButton.visibility = if (firstVisibleItemPosition >= 4) {
                     android.view.View.VISIBLE
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     android.view.View.GONE
                 }
 
-                // Пагинация
+
                 if (!viewModel.isLoading.value!! && totalItemCount > 0 && (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5)) {
                     println("Triggering load more GIFs, visible: $visibleItemCount, total: $totalItemCount, first: $firstVisibleItemPosition")
                     gifAdapter.addLoadingFooter()
