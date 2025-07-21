@@ -7,4 +7,5 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="scroll_button_color">#571B1B</color>
+    <color name="hint_color">#5E363535</color>
 </resources>

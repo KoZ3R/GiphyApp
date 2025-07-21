@@ -51,10 +51,10 @@ class GifDialogFragment : DialogFragment() {
             .error(R.drawable.error_placeholder)
             .into(gifImageView)
 
-        // Устанавливаем название
+
         titleTextView.text = gifTitle
 
-        // Анимация увеличения
+
         gifImageView.scaleX = 0.5f
         gifImageView.scaleY = 0.5f
         gifImageView.alpha = 0f
