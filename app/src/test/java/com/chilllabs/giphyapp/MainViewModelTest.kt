@@ -119,7 +119,7 @@ class MainViewModelTest {
 
         // Assert
         coVerify { isLoadingObserver.onChanged(true) }
-        coVerify { errorObserver.onChanged("Недействительный API-ключ. Проверьте ключ в Giphy Dashboard.") }
+        coVerify { errorObserver.onChanged("Invalid API key. Check the key in the Giphy Dashboard.") }
         coVerify { isLoadingObserver.onChanged(false) }
         assertTrue(viewModel.gifs.value.isNullOrEmpty())
         assertFalse(viewModel.isLoading.value!!)

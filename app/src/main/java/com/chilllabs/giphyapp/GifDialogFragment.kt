@@ -36,7 +36,7 @@ class GifDialogFragment : DialogFragment() {
         val gifUrl = arguments?.getString(ARG_GIF_URL)
         val gifTitle = arguments?.getString(ARG_GIF_TITLE) ?: "Unnamed GIF"
 
-        // Загружаем GIF
+
         Glide.with(this)
             .asGif()
             .load(gifUrl)
